@@ -1,7 +1,7 @@
 "use client";
 
 import { useSocket } from "@/context/SocketProvider";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState, FormEvent } from "react";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 
