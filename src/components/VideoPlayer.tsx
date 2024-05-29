@@ -1,7 +1,15 @@
 import React from "react";
 import ReactPlayer from "react-player";
 
-const VideoPlayer = ({ stream, isAudioMute, name }) => {
+const VideoPlayer = ({
+  stream,
+  isAudioMute,
+  name,
+}: {
+  stream: MediaStream;
+  isAudioMute: boolean;
+  name: string;
+}) => {
   const myStream = name === "My Stream" ? true : false;
   return (
     <div>
