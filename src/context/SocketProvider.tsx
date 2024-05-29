@@ -13,7 +13,7 @@ export const useSocket = (): Socket | null => {
 };
 
 const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
-  const socket = useMemo(() => io("video-peers-server.onrender.com/"), []);
+  const socket = useMemo(() => io("video-server-pdgb.onrender.com/"), []);
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
   );

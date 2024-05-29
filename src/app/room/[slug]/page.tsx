@@ -1,5 +1,6 @@
+"use client";
 import { useSocket } from "../../../context/SocketProvider";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import peer from "../../../service/peer";
 import CallIcon from "@mui/icons-material/Call";
@@ -7,7 +8,7 @@ import VideoCallIcon from "@mui/icons-material/VideoCall";
 import VideoPlayer from "../../../components/VideoPlayer";
 import CallHandleButtons from "../../../components/CallHandleButtons";
 
-const RoomPage: React.FC = () => {
+const RoomPage: React.FC<{ params: { slug: string } }> = ({ params }) => {
   const socket = useSocket();
   const [remoteSocketId, setRemoteSocketId] = useState<string | null>(null);
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
@@ -231,7 +232,8 @@ const RoomPage: React.FC = () => {
   }, [myStream, remoteSocketId, socket]);
 
   const router = useRouter();
-  const { slug } = router.query;
+  // const { slug } = router.query;
+  const slug = params.slug;
 
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen overflow-hidden">
