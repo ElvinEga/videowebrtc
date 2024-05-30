@@ -20,19 +20,12 @@ const VideoPlayer = ({
             : "px-2"
         }`}
       >
-        <h1
-          className={`text-sm font-poppins font-semibold md:text-xl mb-1 text-center ${
-            myStream ? "mt-1" : "mt-4"
-          }`}
-        >
-          {name}
-        </h1>
         <div
-          className={`relative rounded-[30px] overflow-hidden
+          className={`relative rounded-xl overflow-hidden
                  ${
                    myStream
-                     ? " mxs:w-[80px] mxs:h-[120px] msm:w-[100px] msm:rounded-md msm:h-[140px] mmd:w-[140px] md:w-[200px] lg:w-[280px]"
-                     : "mxs:h-[450px] mss:h-[500px] mmd:h-[600px] md:w-[800px] md:h-[500px]"
+                     ? " mxs:w-[80px] mxs:h-[120px] msm:w-[100px] msm:rounded-md msm:h-[140px] mmd:w-[140px] md:w-[200px] lg:w-[280px] mt-1"
+                     : "w-full mxs:h-[450px] mss:h-[500px] mmd:h-[600px] h-[788px] mt-16"
                  }`}
         >
           <ReactPlayer
@@ -43,6 +36,10 @@ const VideoPlayer = ({
             width="100%"
             style={{ transform: "scaleX(-1)" }}
           />
+          <div className="absolute bottom-2 left-2 bg-black/50 rounded-md px-4 py-2 text-white">
+            <div className="font-semibold text-xs">{name}</div>
+            <div className=" text-gray-300 text-xs">Host</div>
+          </div>
         </div>
       </div>
     </div>

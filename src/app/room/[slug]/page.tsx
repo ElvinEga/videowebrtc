@@ -3,10 +3,23 @@ import { useSocket } from "../../../context/SocketProvider";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import peer from "../../../service/peer";
-import CallIcon from "@mui/icons-material/Call";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import VideoPlayer from "../../../components/VideoPlayer";
 import CallHandleButtons from "../../../components/CallHandleButtons";
+import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  LogOutIcon,
+  MicIcon,
+  MicOffIcon,
+  MoveHorizontalIcon,
+  PhoneIcon,
+  RefreshCwIcon,
+  SettingsIcon,
+  ShareIcon,
+  UserRoundX,
+  VideoIcon,
+} from "lucide-react";
 
 const RoomPage: React.FC<{ params: { slug: string } }> = ({ params }) => {
   const socket = useSocket();
@@ -236,59 +249,200 @@ const RoomPage: React.FC<{ params: { slug: string } }> = ({ params }) => {
   const slug = params.slug;
 
   return (
-    <div className="flex flex-col items-center justify-center w-screen h-screen overflow-hidden">
-      <title>Room No. {slug}</title>
-      <h1 className="absolute top-0 left-0 text-5xl text-center font-josefin tracking-tighter mt-5 ml-5 mmd:text-xl mxs:text-sm">
-        Video
-        <VideoCallIcon sx={{ fontSize: 50, color: "rgb(30,220,30)" }} />
-        Peers
-      </h1>
-      <h4 className="font-bold text-xl md:text-2xl mmd:text-sm mt-5 mb-4 msm:max-w-[100px] text-center">
-        {remoteSocketId ? "Connected With Remote User!" : "No One In Room"}
-      </h4>
-      {remoteStream && remoteSocketId && isSendButtonVisible && (
-        <button
-          className="bg-green-500 hover:bg-green-600"
-          onClick={sendStreams}
-        >
-          Send Stream
-        </button>
-      )}
-      {remoteSocketId && callButton && (
-        <button
-          className="text-xl bg-green-500 hover:bg-green-600 rounded-3xl"
-          onClick={handleCallUser}
-          style={{ display: !remoteStream ? "block" : "none" }}
-        >
-          Call{" "}
-          <CallIcon fontSize="medium" className="animate-pulse scale-125" />
-        </button>
-      )}
-      <div className="flex flex-col w-full items-center justify-center overflow-hidden">
-        {myStream && (
-          <VideoPlayer
-            stream={myStream}
-            name={"My Stream"}
-            isAudioMute={isAudioMute}
-          />
-        )}
-        {remoteStream && (
-          <VideoPlayer
-            stream={remoteStream}
-            name={"Remote Stream"}
-            isAudioMute={isAudioMute}
-          />
-        )}
+    <div className="flex h-screen w-full">
+      <div className="flex-1 relative">
+        <title>Room No. {slug}</title>
+        <h1 className="absolute top-0 left-0 text-3xl text-center font-josefin tracking-tighter mt-2 ml-2 mmd:text-xl mxs:text-sm">
+          Video
+          <VideoCallIcon sx={{ fontSize: 50, color: "rgb(30,220,30)" }} />
+          Peers
+        </h1>
+        <div className="w-full h-full relative">
+          {!remoteSocketId && (
+            <h4 className="font-bold text-base text-gray-500 text-center justify-center absolute top-1/2 left-1/2">
+              <UserRoundX className="w-6 h-6 mr-2" /> No One In Room
+            </h4>
+          )}
+          {myStream && (
+            <VideoPlayer
+              stream={myStream}
+              name={"My Stream"}
+              isAudioMute={isAudioMute}
+            />
+          )}
+
+          {remoteStream && (
+            <VideoPlayer
+              stream={remoteStream}
+              name={"Remote Stream"}
+              isAudioMute={isAudioMute}
+            />
+          )}
+          {myStream && remoteStream && !isSendButtonVisible && (
+            <CallHandleButtons
+              isAudioMute={isAudioMute}
+              isVideoOnHold={isVideoOnHold}
+              onToggleAudio={handleToggleAudio}
+              onToggleVideo={handleToggleVideo}
+              onEndCall={handleEndCall}
+            />
+          )}
+        </div>
+
+        <span className="w-full h-full object-cover rounded-md bg-muted" />
       </div>
-      {myStream && remoteStream && !isSendButtonVisible && (
-        <CallHandleButtons
-          isAudioMute={isAudioMute}
-          isVideoOnHold={isVideoOnHold}
-          onToggleAudio={handleToggleAudio}
-          onToggleVideo={handleToggleVideo}
-          onEndCall={handleEndCall}
-        />
-      )}
+      <div className="bg-gray-950 w-72 flex flex-col">
+        {remoteSocketId && (
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex items-center gap-3">
+              <Avatar>
+                <AvatarImage alt="John Doe" src="/placeholder-avatar.jpg" />
+                <AvatarFallback>JD</AvatarFallback>
+              </Avatar>
+              <div>
+                <div className="font-semibold text-sm text-white">John Doe</div>
+                <div className="text-gray-400 text-sm">Participant</div>
+              </div>
+              <div className="ml-auto flex items-center gap-2">
+                <Button
+                  className="text-gray-400 hover:text-gray-50"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <MicIcon className="w-5 h-5" />
+                </Button>
+                <Button
+                  className="text-gray-400 hover:text-gray-50"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <VideoIcon className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Avatar>
+                <AvatarImage alt="Jane Smith" src="/placeholder-avatar.jpg" />
+                <AvatarFallback>JS</AvatarFallback>
+              </Avatar>
+              <div>
+                <div className="font-semibold text-sm text-white">
+                  Jane Smith
+                </div>
+                <div className="text-gray-400 text-sm">Presenter</div>
+              </div>
+              <div className="ml-auto flex items-center gap-2">
+                <Button
+                  className="text-gray-400 hover:text-gray-50"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <MicOffIcon className="w-5 h-5" />
+                </Button>
+                <Button
+                  className="text-gray-400 hover:text-gray-50"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <ShareIcon className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Avatar>
+                <AvatarImage alt="Bob Johnson" src="/placeholder-avatar.jpg" />
+                <AvatarFallback>BJ</AvatarFallback>
+              </Avatar>
+              <div>
+                <div className="font-semibold text-sm text-white">
+                  Bob Johnson
+                </div>
+                <div className="text-gray-400 text-sm">Participant</div>
+              </div>
+              <div className="ml-auto flex items-center gap-2">
+                <Button
+                  className="text-gray-400 hover:text-gray-50"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <MicIcon className="w-5 h-5" />
+                </Button>
+                <Button
+                  className="text-gray-400 hover:text-gray-50"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <VideoIcon className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Avatar>
+                <AvatarImage alt="Sarah Lee" src="/placeholder-avatar.jpg" />
+                <AvatarFallback>SL</AvatarFallback>
+              </Avatar>
+              <div>
+                <div className="font-semibold text-sm text-white">
+                  Sarah Lee
+                </div>
+                <div className="text-gray-400 text-sm">Participant</div>
+              </div>
+              <div className="ml-auto flex items-center gap-2">
+                <Button
+                  className="text-gray-400 hover:text-gray-50"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <MicOffIcon className="w-5 h-5" />
+                </Button>
+                <Button
+                  className="text-gray-400 hover:text-gray-50"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <VideoIcon className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="flex-1 p-4 space-y-4 justify-center items-center">
+          <h4 className="font-bold  text-base text-gray-300 text-center">
+            {remoteSocketId ? "Connected With Remote User!" : "No One In Room"}
+          </h4>
+          {remoteStream && remoteSocketId && isSendButtonVisible && (
+            <Button
+              className="bg-blue-500 hover:bg-green-600 w-full rounded-full"
+              onClick={sendStreams}
+            >
+              <RefreshCwIcon className="w-6 h-6 mr-2" /> Connect
+            </Button>
+          )}
+          {remoteSocketId && callButton && (
+            <Button
+              className=" bg-green-500 hover:bg-green-600 w-full rounded-full"
+              onClick={handleCallUser}
+              style={{ display: !remoteStream ? "flex" : "none" }}
+            >
+              <PhoneIcon className="w-6 h-6 mr-2" /> Call
+            </Button>
+          )}
+        </div>
+        <div className="bg-gray-800 p-4 flex items-center justify-between">
+          <Button className="text-white" size="icon" variant="ghost">
+            <MicIcon className="w-6 h-6" />
+          </Button>
+          <Button className="text-white" size="icon" variant="ghost">
+            <VideoIcon className="w-6 h-6" />
+          </Button>
+          <Button className="text-white" size="icon" variant="ghost">
+            <ShareIcon className="w-6 h-6" />
+          </Button>
+          <Button className="text-white" size="icon" variant="ghost">
+            <MoveHorizontalIcon className="w-6 h-6" />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

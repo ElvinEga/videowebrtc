@@ -4,6 +4,9 @@ import { useSocket } from "@/context/SocketProvider";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState, FormEvent } from "react";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "./ui/button";
 
 interface RoomJoinData {
   email: string;
@@ -64,11 +67,11 @@ const LobbyScreen: React.FC = () => {
       </p>
       <div className="bg-white p-6 rounded shadow-md">
         <form
-          className="flex flex-col items-center justify-center"
+          className="flex flex-col items-center justify-center gap-2"
           onSubmit={handleSubmitForm}
         >
-          <label htmlFor="email">Email ID</label>
-          <input
+          <Label htmlFor="email">Email ID</Label>
+          <Input
             type="email"
             id="email"
             required
@@ -77,8 +80,8 @@ const LobbyScreen: React.FC = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
           <br />
-          <label htmlFor="room">Room Number</label>
-          <input
+          <Label htmlFor="room">Room Number</Label>
+          <Input
             type="number"
             id="room"
             required
@@ -87,7 +90,7 @@ const LobbyScreen: React.FC = () => {
             onChange={(e) => setRoom(e.target.value)}
           />
           <br />
-          <button className="bg-blue-500 hover:bg-blue-600">Join</button>
+          <Button className="bg-blue-500 hover:bg-blue-600">Join</Button>
         </form>
       </div>
     </div>
